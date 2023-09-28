@@ -68,3 +68,16 @@ button.accept-policy {
 	white-space: nowrap;
 	line-height: 60px;
 }
+
+.field-validation-error {
+	color: #e01d1d;
+}
+
+.close-alert {
+	position: absolute;
+	right: -10px;
+	top: -15px;
+	border-radius: 15px;
+	width: 30px;
+	height: 31px;
+}
