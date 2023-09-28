@@ -1,24 +1,59 @@
+using Controle_de_Contatos.Models;
+using Controle_de_Contatos.Repositorio;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Controle_de_Contatos.Controllers
 {
 	public class ContatoController : Controller
 	{
+		private readonly IContatoRepositorio _contatoRepositorio;
+
+		public ContatoController(IContatoRepositorio contatoRepositorio)
+		{
+			_contatoRepositorio = contatoRepositorio;
+		}
+
 		public IActionResult Index()
 		{
-			return View();
+			List<ContatoModel> contatos = _contatoRepositorio.BuscarTodos();
+			return View(contatos);
 		}
+
 		public IActionResult Criar()
 		{
 			return View();
 		}
-		public IActionResult Editar()
+
+		public IActionResult Editar(int id)
 		{
-			return View();
+			ContatoModel contato = _contatoRepositorio.ListarPorId(id);
+			return View(contato);
 		}
-		public IActionResult ApagarConfirmacao()
+
+		public IActionResult ApagarConfirmacao(int id)
 		{
-			return View();
+			ContatoModel contato = _contatoRepositorio.ListarPorId(id);
+			return View(contato);
+		}
+
+		public IActionResult Apagar(int id)
+		{
+			_contatoRepositorio.Apagar(id);
+			return RedirectToAction("Index");
+		}
+
+		[HttpPost]
+		public IActionResult Criar(ContatoModel contato)
+		{
+			_contatoRepositorio.Adicionar(contato);
+			return RedirectToAction("Index");
+		}
+
+		[HttpPost]
+		public IActionResult Alterar(ContatoModel contato)
+		{
+			_contatoRepositorio.Atualizar(contato);
+			return RedirectToAction("Index");
 		}
 	}
 }

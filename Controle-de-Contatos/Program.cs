@@ -1,7 +1,16 @@
+using Controle_de_Contatos.Data;
+using Controle_de_Contatos.Repositorio;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddEntityFrameworkSqlServer()
+	.AddDbContext<BancoContext>(options => options.UseSqlServer("name=ConnectionStrings:DataBase"));
+builder.Services.AddScoped<IContatoRepositorio, ContatoRepositorio>();  // Toda vez que "IContatoRepositorio" for instanciada, será substituída por "ContatoRepositório".
+																		// Isto é "Injeção de Dependência".
+
 
 var app = builder.Build();
 
