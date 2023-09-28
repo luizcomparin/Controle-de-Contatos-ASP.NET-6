@@ -1,6 +1,7 @@
 using Controle_de_Contatos.Models;
 using Controle_de_Contatos.Repositorio;
 using Microsoft.AspNetCore.Mvc;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Controle_de_Contatos.Controllers
 {
@@ -38,22 +39,66 @@ namespace Controle_de_Contatos.Controllers
 
 		public IActionResult Apagar(int id)
 		{
-			_contatoRepositorio.Apagar(id);
-			return RedirectToAction("Index");
+			try
+			{
+				bool apagado = _contatoRepositorio.Apagar(id);
+				if (apagado)
+				{
+					TempData["MensagemSucesso"] = "Contato apagado com sucesso!";
+				} else
+				{
+					TempData["MensagemErro"] = "Ops, não conseguimos apagar seu contato!";
+				}
+
+				return RedirectToAction("Index");
+			}
+			catch (Exception error)
+			{
+				TempData["MensagemErro"] = $"Ops, não conseguimos apagar seu contato. Detalhe do erro: {error.Message}";
+				return RedirectToAction("Index");
+			}
 		}
 
 		[HttpPost]
 		public IActionResult Criar(ContatoModel contato)
 		{
-			_contatoRepositorio.Adicionar(contato);
-			return RedirectToAction("Index");
+			try
+			{
+				if (ModelState.IsValid)
+				{
+					_contatoRepositorio.Adicionar(contato);
+					TempData["MensagemSucesso"] = "Contato cadastrado com sucesso!";
+					return RedirectToAction("Index");
+				}
+
+				return View(contato);
+			}
+			catch (Exception error)
+			{
+				TempData["MensagemErro"] = $"Ops, não conseguimos cadastrar seu contato. Por favor, tente novamente. Detalhes do erro: {error.Message}";
+				return RedirectToAction("Index");
+			}
 		}
 
 		[HttpPost]
 		public IActionResult Alterar(ContatoModel contato)
 		{
-			_contatoRepositorio.Atualizar(contato);
-			return RedirectToAction("Index");
+			try
+			{
+				if (ModelState.IsValid)
+				{
+					_contatoRepositorio.Atualizar(contato);
+					TempData["MensagemSucesso"] = "Contato alterado com sucesso!";
+					return RedirectToAction("Index");
+				}
+
+				return View("Editar", contato);
+			}
+			catch (Exception error)
+			{
+				TempData["MensagemErro"] = $"Ops, não conseguimos atualizar seu contato. Por favor, tente novamente. Detalhes do erro: {error.Message}";
+				return RedirectToAction("Index");
+			}
 		}
 	}
 }

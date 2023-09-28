@@ -3,6 +3,24 @@
     ViewData["Title"] = "Listagem de Contatos";
 }
 
+@if (TempData["MensagemSucesso"] != null)
+{
+    <div class="alert alert-success" role="alert">
+        <button type="button" class="btn btn-danger btn-sm close-alert" arial-label="Close">X</button>
+        @TempData["MensagemSucesso"]
+    </div>
+}
+
+@if (TempData["MensagemErro"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        <button type="button" class="btn btn-danger btn-sm close-alert" arial-label="Close">X</button>
+        @TempData["MensagemErro"]
+    </div>
+}
+
+
+
 <h1 class="display-4">Listagem de Contatos</h1>
 
 <br />
@@ -12,7 +30,7 @@
 
 <br />
 
-<table class="table">
+<table class="table" id="table-contatos">
     <thead>
         <tr>
             <th scope="col">#</th>
